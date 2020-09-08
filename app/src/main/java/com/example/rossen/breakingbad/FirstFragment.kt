@@ -1,24 +1,21 @@
 package com.example.rossen.breakingbad
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.rossen.breakingbad.web.ReposClient
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.example.rossen.breakingbad.viewmodel.MovieCharacterViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
 
-    //should be singleton and injected
-    private val reposClient: ReposClient = ReposClient()
+    private val viewModel: MovieCharacterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,24 +33,6 @@ class FirstFragment : Fragment() {
         }
 
 
-        val disposable = CompositeDisposable()
-        disposable.add(reposClient.queryCharacters()
-            //.delay(2000, TimeUnit.MILLISECONDS)  //just for testing
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ stargazers ->
-                val a = stargazers
-//                internalStargazersState.value =
-//                    StargazersState.Stargazers(stargazers)
-//                repository.stargazers = stargazers
-//                disposable.dispose()
-            }
-                , { throwable ->
-                    val b = throwable
-//                    internalReposState.value =
-//                        RepositoriesState.ReposError(throwable.message)
-                    disposable.dispose()
-                }
-            ))
+
     }
 }
